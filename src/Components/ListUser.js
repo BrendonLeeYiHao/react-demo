@@ -35,27 +35,46 @@ export default function ListUser(){
         getUsers();
     }, []);
 
+    // function getUsers(){
+    //     axios.get('http://localhost:80/reactjs/api/getAllUsers.php').then(function(response){
+    //         console.log(response.data);
+    //         setUsers(response.data);
+    //     })
+    // }
+
     function getUsers(){
-        axios.get('http://localhost:80/reactjs/api/getAllUsers.php').then(function(response){
+        axios.get('http://localhost:8000/api/getAllUsers').then(function(response){
             console.log(response.data);
             setUsers(response.data);
         })
     }
 
+
     const editProfile = (id) => {
         // axios.post(`http://localhost:80/reactjs/api/getUser.php?id=${id}`, {id: id})
 
         // setIsModalOpen(true);
-        handleShow();
-        axios.post('http://localhost:80/reactjs/api/getUser.php', {id: id}).then(function(response){
+        
+        axios.post('http://localhost:8000/api/getUser', {id}).then(function(response){
             console.log(response.data);
             setSingleUser(response.data);
         })
+        handleShow();
+
+        // axios.post('http://localhost:80/reactjs/api/getUser.php', {id: id}).then(function(response){
+        //     console.log(response.data);
+        //     setSingleUser(response.data);
+        // })
+
     }
 
 
     const deleteProfile = (id) => {
-        axios.post('http://localhost:80/reactjs/api/deleteUser.php', {id: id}).then(function(response){
+        // axios.post('http://localhost:80/reactjs/api/deleteUser.php', {id: id}).then(function(response){
+        //     console.log(response.data);
+        //     getUsers();
+        // })
+        axios.post('http://localhost:8000/api/deleteUser', {id}).then(function(response){
             console.log(response.data);
             getUsers();
         })
@@ -81,7 +100,14 @@ export default function ListUser(){
         }
         else{
             event.preventDefault();
-            axios.post('http://localhost:80/reactjs/api/updateUser.php', {user: singleUser}).then(function(response){
+            // axios.post('http://localhost:80/reactjs/api/updateUser.php', {user: singleUser}).then(function(response){
+            //     console.log(response.data);
+            //     getUsers();
+            //     handleClose();
+
+            // });
+            const userId = singleUser.id;
+            axios.post(`http://localhost:8000/api/updateUser?id=${userId}`, singleUser).then(function(response){
                 console.log(response.data);
                 getUsers();
                 handleClose();

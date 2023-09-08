@@ -17,7 +17,12 @@ export default function CreateUser(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        axios.post('http://localhost:80/reactjs/api/createuser.php', inputs).then(function(response){
+        // axios.post('http://localhost:80/reactjs/api/createuser.php', inputs).then(function(response){
+        //     console.log(response.data);
+        //     navigate('/');
+        // });
+
+        axios.post('http://localhost:8000/api/register', inputs).then(function(response){
             console.log(response.data);
             navigate('/');
         });
