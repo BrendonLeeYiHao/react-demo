@@ -15,6 +15,8 @@ class UserController extends Controller
         $user->email = $req->input('email');
         $user->mobile = $req->input('mobile');
         $user->save();
+
+        return response()->json('New user created successfully!');
     }
 
     function getAllUsers(){
@@ -38,13 +40,15 @@ class UserController extends Controller
 
         $user->save();
 
-        return response()->json(['message' => 'User updated successfully!']);
+        return response()->json("User of id {$userId} is updated successfully!");
     }
 
     function deleteUser(Request $req){
         $userId = $req->input('id');
         $user = Account::find($userId);
         $user->delete();
+
+        return response()->json("User of id {$userId} is deleted successfully!");
     }
 
     function getUser(Request $req){

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 export default function CreateUser(){
     
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [inputs, setInputs] = useState({});
 
@@ -17,16 +20,10 @@ export default function CreateUser(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // axios.post('http://localhost:80/reactjs/api/createuser.php', inputs).then(function(response){
-        //     console.log(response.data);
-        //     navigate('/');
-        // });
-
         axios.post('http://localhost:8000/api/register', inputs).then(function(response){
             console.log(response.data);
-            navigate('/');
+            Swal.fire('Success', response.data, 'success');
         });
-        console.log(inputs);
     }
     
     

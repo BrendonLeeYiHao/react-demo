@@ -5,6 +5,7 @@ import { Modal } from "react-bootstrap";
 import {Table} from "react-bootstrap";
 import * as yup from 'yup';
 import * as formik from 'formik';
+import Swal from "sweetalert2";
 
 export default function ListUser(){
 
@@ -35,13 +36,6 @@ export default function ListUser(){
         getUsers();
     }, []);
 
-    // function getUsers(){
-    //     axios.get('http://localhost:80/reactjs/api/getAllUsers.php').then(function(response){
-    //         console.log(response.data);
-    //         setUsers(response.data);
-    //     })
-    // }
-
     function getUsers(){
         axios.get('http://localhost:8000/api/getAllUsers').then(function(response){
             console.log(response.data);
@@ -50,37 +44,22 @@ export default function ListUser(){
     }
 
 
-    const editProfile = (id) => {
-        // axios.post(`http://localhost:80/reactjs/api/getUser.php?id=${id}`, {id: id})
-
-        // setIsModalOpen(true);
-        
+    const editProfile = (id) => {   
         axios.post('http://localhost:8000/api/getUser', {id}).then(function(response){
             console.log(response.data);
             setSingleUser(response.data);
         })
         handleShow();
-
-        // axios.post('http://localhost:80/reactjs/api/getUser.php', {id: id}).then(function(response){
-        //     console.log(response.data);
-        //     setSingleUser(response.data);
-        // })
-
     }
 
 
     const deleteProfile = (id) => {
-        // axios.post('http://localhost:80/reactjs/api/deleteUser.php', {id: id}).then(function(response){
-        //     console.log(response.data);
-        //     getUsers();
-        // })
         axios.post('http://localhost:8000/api/deleteUser', {id}).then(function(response){
             console.log(response.data);
+            Swal.fire("Success", response.data, "success");
             getUsers();
         })
     }
-
-    // const [inputs, setInputs] = useState({});
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -100,18 +79,12 @@ export default function ListUser(){
         }
         else{
             event.preventDefault();
-            // axios.post('http://localhost:80/reactjs/api/updateUser.php', {user: singleUser}).then(function(response){
-            //     console.log(response.data);
-            //     getUsers();
-            //     handleClose();
-
-            // });
             const userId = singleUser.id;
             axios.post(`http://localhost:8000/api/updateUser?id=${userId}`, singleUser).then(function(response){
                 console.log(response.data);
+                Swal.fire("Success",response.data,"success");
                 getUsers();
                 handleClose();
-
             });
         }
         setValidated(true);
@@ -155,84 +128,46 @@ export default function ListUser(){
                         <Modal.Title>Edit User</Modal.Title>
                     </Modal.Header>
                     <Modal.Body style={{marginBottom:'-15px'}}>
-                                <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                                    <Form.Group className="mb-3" controlId="formGroupId">
-                                        <Form.Label>Id</Form.Label>
-                                        <Form.Control name="id" value={singleUser.id} readOnly></Form.Control>
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formGroupName">
-                                        <Form.Label>Name</Form.Label>
-                                        <InputGroup hasValidation>
-                                            <Form.Control name="name" required value={singleUser.name} onChange={handleChange} ></Form.Control>
-                                            <Form.Control.Feedback type="invalid">Name is required</Form.Control.Feedback>
-                                        </InputGroup>
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formGroupEmail">
-                                        <Form.Label>Email</Form.Label>
-                                        <InputGroup hasValidation>
-                                            <Form.Control type="email" name="email" required value={singleUser.email} onChange={handleChange} ></Form.Control>
-                                            <Form.Control.Feedback type="invalid">Invalid email</Form.Control.Feedback>
-                                        </InputGroup>
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formGroupMobile">
-                                        <Form.Label>Mobile</Form.Label>
-                                        <InputGroup hasValidation>
-                                            <Form.Control name="mobile" required value={singleUser.mobile} onChange={handleChange}></Form.Control>
-                                            <Form.Control.Feedback type="invalid">Mobile is required</Form.Control.Feedback>
-                                        </InputGroup>
-                                        
-                                    </Form.Group>
-                                    <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
-                                        Close
-                                    </Button>
-                                    <Button type="submit" variant="primary">
-                                        Save Changes
-                                    </Button>
-                                    </Modal.Footer>
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3" controlId="formGroupId">
+                                <Form.Label>Id</Form.Label>
+                                <Form.Control name="id" value={singleUser.id} readOnly></Form.Control>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formGroupName">
+                                <Form.Label>Name</Form.Label>
+                                <InputGroup hasValidation>
+                                    <Form.Control name="name" required value={singleUser.name} onChange={handleChange} ></Form.Control>
+                                    <Form.Control.Feedback type="invalid">Name is required</Form.Control.Feedback>
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formGroupEmail">
+                                <Form.Label>Email</Form.Label>
+                                <InputGroup hasValidation>
+                                    <Form.Control type="email" name="email" required value={singleUser.email} onChange={handleChange} ></Form.Control>
+                                    <Form.Control.Feedback type="invalid">Invalid email</Form.Control.Feedback>
+                                </InputGroup>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formGroupMobile">
+                                <Form.Label>Mobile</Form.Label>
+                                <InputGroup hasValidation>
+                                    <Form.Control name="mobile" required value={singleUser.mobile} onChange={handleChange}></Form.Control>
+                                    <Form.Control.Feedback type="invalid">Mobile is required</Form.Control.Feedback>
+                                </InputGroup>
                                 
-                                </Form>
+                            </Form.Group>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button type="submit" variant="primary">
+                                Save Changes
+                            </Button>
+                            </Modal.Footer>
+                        </Form>
                     </Modal.Body>
                     
                 </Modal>
             </>
-
-
-                {/* <div className="modal fade" id="editModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div className="modal-body" style={{marginBottom:'-15px'}}>
-                        <form onSubmit={handleSubmit}>
-                            <label>Id: </label>
-                            <input type="text" name="id" value={singleUser.id} readOnly/>
-                            <br/><br/>
-                            <label>Name: </label>
-                            <input type="text" name="name" value={singleUser.name} onChange={handleChange}/>
-                            <br/><br/>
-                            <label>Email: </label>
-                            <input type="text" name="email" value={singleUser.email} onChange={handleChange}/>
-                            <br/><br/>
-                            <label>Mobile: </label>
-                            <input type="text" name="mobile" value={singleUser.mobile} onChange={handleChange}/>
-                            <br/><br/>
-                            
-                            <div className="modal-footer">
-                                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        
-                        </form>
-                    </div>
-
-                    </div>
-                </div>
-                </div> */}
-            
-            
         </div>
         
     )
