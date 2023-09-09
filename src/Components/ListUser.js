@@ -6,6 +6,9 @@ import {Table} from "react-bootstrap";
 import * as yup from 'yup';
 import * as formik from 'formik';
 import Swal from "sweetalert2";
+import DatePicker from "react-date-picker";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
 
 export default function ListUser(){
 
@@ -29,8 +32,24 @@ export default function ListUser(){
         id:'',
         name:'',
         email:'',
-        mobile:''
+        mobile:'',
+        date: new Date()
     });
+
+    //disabled all dates before today and 30 days after
+    const today = new Date();
+    const advancedDates = new Date();
+    today.setDate(today.getDate() - 1);
+    advancedDates.setDate(advancedDates.getDate() + 29); 
+
+    //at least 18 years old
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - 18);
+
+    const isDateDisabled = (date) => {
+        // return date < today || date > advancedDates;
+        return date >= maxDate;
+    }
 
     useEffect(() => {
         getUsers();
@@ -67,6 +86,15 @@ export default function ListUser(){
         setSingleUser(values => ({...values, [name]: value}));
     }
 
+    const handleDateChange = (date) => {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + 1);
+        const isoDateString = newDate.toISOString().split('T')[0];
+        console.log(isoDateString);
+        // const formattedDate = date.toISOString().split('T')[0];
+        setSingleUser((values) => ({...values, dob: isoDateString}));
+    }
+
     const [validated, setValidated] = useState(false);
 
     const handleSubmit = (event) => {
@@ -80,6 +108,7 @@ export default function ListUser(){
         else{
             event.preventDefault();
             const userId = singleUser.id;
+            console.log(singleUser);
             axios.post(`http://localhost:8000/api/updateUser?id=${userId}`, singleUser).then(function(response){
                 console.log(response.data);
                 Swal.fire("Success",response.data,"success");
@@ -101,6 +130,7 @@ export default function ListUser(){
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
+                        <th>Dob</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -111,6 +141,7 @@ export default function ListUser(){
                             <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.mobile}</td>
+                            <td>{user.dob}</td>
                             <td>
                                 <Button variant="primary" onClick={() => editProfile(user.id)}>Edit</Button>&nbsp;&nbsp;
                                 <Button variant="danger" onClick={() => deleteProfile(user.id)}>Delete</Button>
@@ -153,7 +184,12 @@ export default function ListUser(){
                                     <Form.Control name="mobile" required value={singleUser.mobile} onChange={handleChange}></Form.Control>
                                     <Form.Control.Feedback type="invalid">Mobile is required</Form.Control.Feedback>
                                 </InputGroup>
-                                
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formGroupDob">
+                                <Form.Label>Dob</Form.Label>
+                                <InputGroup hasValidation>
+                                    <DatePicker clearIcon={null} format="yyyy-MM-dd" onChange={handleDateChange} value={singleUser.dob} maxDate={maxDate} tileDisabled={({date}) => isDateDisabled(date)}/>
+                                </InputGroup>  
                             </Form.Group>
                             <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>
