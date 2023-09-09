@@ -11,9 +11,11 @@ class UserController extends Controller
     function register(Request $req){
         
         $user = new Account;
-        $user->name = $req->input('name');
-        $user->email = $req->input('email');
-        $user->mobile = $req->input('mobile');
+        $user->name = $req->name;
+        $user->email = $req->email;
+        $user->mobile = $req->mobile;
+        $user->dob = $req->dob;
+
         $user->save();
 
         return response()->json('New user created successfully!');
@@ -26,17 +28,14 @@ class UserController extends Controller
     }
 
     function updateUser(Request $req){
-        $name = $req->input('name');
-        $email = $req->input('email');
-        $mobile = $req->input('mobile');
 
-        $userId = $req->input('id');
+        $userId = $req->id;
         $user = Account::find($userId);
-
-
-        $user->name = $name;
-        $user->email = $email;
-        $user->mobile = $mobile;
+        
+        $user->name = $req->name;
+        $user->email = $req->email;
+        $user->mobile = $req->mobile;
+        $user->dob = $req->dob;
 
         $user->save();
 
@@ -44,7 +43,7 @@ class UserController extends Controller
     }
 
     function deleteUser(Request $req){
-        $userId = $req->input('id');
+        $userId = $req->id;
         $user = Account::find($userId);
         $user->delete();
 
@@ -52,7 +51,7 @@ class UserController extends Controller
     }
 
     function getUser(Request $req){
-        $userId = $req->input('id');
+        $userId = $req->id;
         $user = Account::find($userId);
         return response()->json($user);
     }
