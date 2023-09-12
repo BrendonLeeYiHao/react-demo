@@ -10,6 +10,7 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 
+
 export default function ListUser(){
 
     // const { Formik } = formik;
@@ -72,12 +73,16 @@ export default function ListUser(){
     }
 
 
-    const deleteProfile = (id) => {
+    const deleteProfile = (id, file) => {
         axios.post('http://localhost:8000/api/deleteUser', {id}).then(function(response){
             console.log(response.data);
-            Swal.fire("Success", response.data, "success");
             getUsers();
-        })
+            Swal.fire("Success", response.data, "success");
+        
+            axios.post('http://localhost:8000/api/deleteImage', {file}).then(function(response){
+                console.log(response.data);
+            });
+        });
     }
 
     const handleChange = (event) => {
@@ -128,9 +133,11 @@ export default function ListUser(){
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Role</th>
                         <th>Email</th>
                         <th>Mobile</th>
                         <th>Dob</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -139,12 +146,21 @@ export default function ListUser(){
                         <tr key={key}>
                             <td>{user.id}</td>
                             <td>{user.name}</td>
+                            <td>{user.role}</td>
                             <td>{user.email}</td>
                             <td>{user.mobile}</td>
                             <td>{user.dob}</td>
+                            <td><img width={200} height={120} src={require(`../assets/image/${user.file}`)}/></td>
+                                {/* {user.file ? (
+                                    <img width={200} height={120} src={require(`../assets/image/${user.file}`)}/>
+                                ) : (
+                                    <span>None</span>
+                                )}
+                            </td> */}
+
                             <td>
                                 <Button variant="primary" onClick={() => editProfile(user.id)}>Edit</Button>&nbsp;&nbsp;
-                                <Button variant="danger" onClick={() => deleteProfile(user.id)}>Delete</Button>
+                                <Button variant="danger" onClick={() => deleteProfile(user.id, user.file)}>Delete</Button>
                             </td>
                         </tr>
                     ))}
