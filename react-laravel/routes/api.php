@@ -26,3 +26,5 @@ Route::get('getAllUsers', [UserController::class, 'getAllUsers']);
 Route::post('updateUser', [UserController::class, 'updateUser']);
 Route::post('deleteUser', [UserController::class, 'deleteUser']);
 Route::post('getUser', [UserController::class, 'getUser']);
+Route::post('deleteImage', [UserController::class, 'deleteImage']);
+Route::post('login', [UserController::class, 'login']);

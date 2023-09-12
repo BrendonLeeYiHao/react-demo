@@ -13,7 +13,7 @@ class Account extends Model
 
     protected $primaryKey = 'id';
 
-    protected $fillable = ['name', 'email', 'mobile', 'dob'];
+    protected $fillable = ['name', 'password', 'role', 'email', 'mobile', 'dob', 'file'];
 
     public $timestamps = false;
 }
