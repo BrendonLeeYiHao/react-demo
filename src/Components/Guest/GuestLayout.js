@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { BrowserRouter, Link, Routes, Route, NavLink, Outlet } from 'react-router-dom';
+import { BrowserRouter, Link, Routes, Route, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 import { Button } from 'react-bootstrap';
 // import CreateUser from './Components/CreateUser';
@@ -15,8 +15,11 @@ import { Button } from 'react-bootstrap';
 function GuestLayout() {
     const {isLoggedIn, setIsLoggedIn} = useAuth();
 
+    const navigate = useNavigate();
+
     const logout = () => {
         setIsLoggedIn(false);
+        navigate("/login");
     }
 
     return (
@@ -48,6 +51,9 @@ function GuestLayout() {
                                 Separated link
                             </NavDropdown.Item>
                         </NavDropdown>
+                        <Nav.Link>
+                            <NavLink to="/book">Booking</NavLink>
+                        </Nav.Link>
                     </Nav>
                     <Nav className='ml-auto'>
                         {isLoggedIn ? (

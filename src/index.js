@@ -15,6 +15,7 @@ import AdminLayout from './Components/Admin/AdminLayout';
 import Message from './Message';
 import Dashboard from './Components/Admin/Dashboard';
 import { AuthProvider } from './AuthContext';
+import { Book } from './Components/Guest/Book';
 
 // import { isAuthenticated } from './Components/Login';
 // import { AuthProvider } from './AuthContext';
@@ -40,7 +41,8 @@ const router = createBrowserRouter([
       {path: 'register', element: <CreateUser/>},
       {path: 'account-update-delete', element: <ListUser/>},
       {path: 'login', element: <Login/>},
-      {path: 'message', element: <Message/>}
+      {path: 'message', element: <Message/>},
+      {path: 'book', element: <Book/>}
     ]
   },
   {
